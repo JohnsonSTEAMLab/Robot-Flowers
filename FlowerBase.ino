@@ -1,35 +1,37 @@
-// A basic robot flower program that drives
-// the flower via button presses
-
-#include <Servo.h>        //tell Arduino that we want to use the servo library
-Servo flowerMotor;        // create a servo object called flowerMotor
-
+#include <Servo.h>;
+Servo myServo;
+int fullyOpen = 100;
+int fullyClosed = 0;
 void setup() {
-  Serial.begin(9600);     //start serial communication
-  flowerMotor.attach(3);  //attach flowerMotor to pin 3 (tricorder servo header)
-  pinMode(10, INPUT_PULLUP);
-  pinMode(11, INPUT_PULLUP);
+  // put your setup code here, to run once:
+Serial.begin(9600);
+myServo.attach(3);
+myServo.write(0);
+pinMode(10, INPUT_PULLUP);
+pinMode(11, INPUT_PULLUP);
 }
 
 void loop() {
-    
+  // put your main code here, to run repeatedly:
 if(digitalRead(10) == 0){
   openFlower();
-  delay(100);
 }
 if(digitalRead(11) == 0){
   closeFlower();
-  delay(100);
+  Serial.println("yep");
 }
 }
 
 void openFlower(){
-flowerMotor.write(75);      // USE 10. At 0, the motor is pulling against
-                            // flower model, causing strain damage. 
-                            // USE 75 for open, more than that will take gears
-                            // out of contact. 
+  for(int i = fullyClosed; i <= fullyOpen; i++){
+    myServo.write(i);
+    delay(20);
+  }
 }
 
 void closeFlower(){
-flowerMotor.write(10);
+    for(int i = fullyOpen; i >= fullyClosed; i--){
+    myServo.write(i);
+    delay(20);
+  }
 }
